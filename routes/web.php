@@ -22,26 +22,60 @@ Route::get('/', function () {
     return redirect('login');
 })->name("home");
 
- //api login
-Route::post('/api/login',[authController::class,'login'])->name("apiLogin");
-Route::post('/api/register', [authController::class,'register'])->name("apiRegister");
-Route::post('/api/logout', [authController::class,'logout'])->name("apiLogout");
+//api login
+Route::post('/api/login', [authController::class, 'login'])->name("apiLogin");
 
-Route::get('/test-auth', function () {
-    $empresa = App\Models\User::first();
-    Auth::guard('web')->login($empresa);
-    return   redirect('/usuario');
-});
-Route::view('/login','login')->name("login");
-
-//auth
-
-Route::middleware('auth:empresa')->get('/empresa',function (Request $request){
-    return view('empresa',["request"=>$request]);}
-    )->name("empresa");
-
-    Route::get('/usuario',function (Request $request){
-        return view('usuario',["request"=>$request]);}
-        )->name("usuario");
+Route::post('/api/register', [authController::class, 'register'])->name("apiRegister");
+Route::post('/api/update', [authController::class, 'update'])->name("apiUpdate");
+Route::middleware(['auth:empresa','auth:web'])->post('/api/logout', [authController::class, 'logout'])->name("apiLogout");
 
 
+Route::view('/login', 'login')->name("login");
+
+//auth empresa
+
+Route::middleware('auth:empresa')->get(
+    '/empresa',
+    function (Request $request) {
+        return view('empresa.empresa', ["request" => $request]);
+    }
+)->name("empresa");
+
+
+Route::middleware('auth:empresa')->get(
+    '/reportes',
+    function (Request $request) {
+        return view('empresa.reportes', ["request" => $request]);
+    }
+)->name("empresa");
+
+
+
+
+
+
+
+
+//usuario
+
+
+Route::middleware('auth:web')->get(
+    '/usuario',
+    function (Request $request) {
+        return view('usuario.usuario', ["request" => $request]);
+    }
+)->name("usuario");
+
+Route::middleware('auth:web')->get(
+    '/nuevaempresa',
+    function (Request $request) {
+        return view('usuario.nuevaempresa',["request" => $request]);
+    }
+)->name("nuevaemp");
+
+Route::middleware('auth:web')->get(
+    '/nuevousuario',
+    function (Request $request) {
+        return view('usuario.nuevousuario',["request" => $request]);
+    }
+)->name("nuevousu");

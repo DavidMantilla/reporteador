@@ -1,6 +1,6 @@
 import axios from "axios";
 
-document.getElementById("login").addEventListener("submit", (event) => {
+let login= (event) => {
     // Prevenir el comportamiento por defecto del formulario
     event.preventDefault();
     document.getElementById("error").className = "d-none";
@@ -32,4 +32,10 @@ document.getElementById("login").addEventListener("submit", (event) => {
                 erroralert.innerText = error.response.data.Error;
             });
     }
-});
+}
+
+
+if(document.getElementById("login")){
+document.getElementById("login").addEventListener("submit", login);
+
+}

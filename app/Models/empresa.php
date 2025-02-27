@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-
+use Flat3\Lodata\Attributes\LodataRelationship;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Empresa extends Authenticatable
+class Empresa extends Authenticatable 
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,8 +18,13 @@ class Empresa extends Authenticatable
     protected $hidden = [
         'password',
     ];
-
     public $timestamps = false;
+    #[LodataRelationship()]
+    public function sucursales()
+    {
+        return $this->hasMany(sucursales::class, 'Id_Empresa', 'Id_Empresa');
+    }
+
 
     public function getAuthPassword()
     {

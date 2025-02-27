@@ -1,0 +1,102 @@
+.sidebar{
+    
+background-color: #fff;
+
+height: 150vh;
+box-shadow: 2px 1px 1px #ece1e1cc;
+min-width: 80px;
+padding:0px;
+
+ul{
+    margin-top: 60px;
+    padding: 20px;
+    li{
+        a{
+     list-style: none;
+      padding: 10px;
+      margin: 20px 0px ;
+      font-size: 15px;
+      border-radius: 10px;
+      background-color: #ece1e1cc;
+      color: #000;
+      text-align: center;
+      
+        }
+    
+
+      @media screen and (max-width:'900px') {
+       
+        a span{
+
+            display: none;
+        }
+      }
+  
+    }
+
+    a:hover, a:active, a:focus{
+        background-color: #f5cd91cc;
+        color: $primary;
+    }
+
+    a.active{ 
+    
+        background-color: #f5cd91cc;
+        color: $primary;
+    }
+
+   
+}
+
+
+}
+
+
+.card{
+    margin: 8px;
+    border: 1.2px solid #000;
+.card-header{
+    font-weight: bolder;
+} 
+.card-header, .card-footer{
+
+    background-color: #f8fafc;
+}
+.card-header-primary{
+    background-color: $primary;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+.card-header-secondary{
+    background-color: $secondary;
+    color: #222;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.card-body{
+
+    .list{
+
+      display: flex;
+      justify-content: space-between;
+      padding: 2px;
+      border-bottom: 1px solid #444;
+
+    }
+     .label{
+        font-weight: bold;
+        font-size: 16px;
+        margin-left: 10px;
+     }
+    .form-control, .form-check-input{
+
+        border: 1.2px solid #000;
+        margin: 2px  10px 10px 10px;
+     }
+
+ 
+}
+}
+
