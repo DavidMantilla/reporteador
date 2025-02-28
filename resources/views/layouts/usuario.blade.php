@@ -84,16 +84,24 @@
 
                     <ul>
                         <li> <a class="nav-link @if ($_SERVER['REQUEST_URI'] == '/usuario') active @endif"
-                                href="{{ route('usuario') }}"><i class="fa-solid fa-users"></i> &nbsp; <span>Ver
-                                    empresas y usuarios </span> </li></a>
+                                href="{{ route('usuario') }}">&nbsp; <i class="fa-solid fa-building-user"></i><span>Ver
+                                    Empresas y usuarios </span> </li></a>
                         <li> <a class="nav-link @if ($_SERVER['REQUEST_URI'] == '/nuevaempresa') active @endif"
-                                href="{{ route('nuevaemp') }}"> <i class="fa-solid fa-building"></i> &nbsp; <span> crear
+                                href="{{ route('nuevaemp') }}"> <i class="fa-solid fa-city"></i> &nbsp; <span> crear
                                     Empresa</span> </li></a>
+                        <li> <a class="nav-link @if ($_SERVER['REQUEST_URI'] == '/nuevasucursal') active @endif"
+                                href="{{ route('nuevasucursal') }}"> <i class="fa-solid fa-building"></i> &nbsp; <span>
+                                    Crear
+                                    Sucursales</span> </li></a>
+                        <li> <a class="nav-link @if ($_SERVER['REQUEST_URI'] == '/nuevalicencia') active @endif"
+                                href="{{ route('nuevalicencia') }}"> <i class="fa-solid fa-file-contract"></i>&nbsp; <span>
+                                    Agregar
+                                    licencia</span> </li></a>
                         @if (Auth::guard('web')->user()->Admin)
                             <li>
                                 <a class="nav-link @if ($_SERVER['REQUEST_URI'] == '/nuevousuario') active @endif"
                                     href="{{ route('nuevousu') }}"> <i class="fa-solid fa-user-plus"></i> &nbsp;<span>
-                                        crear Usuario</span>
+                                        Crear Usuario</span>
                                 </a>
                             </li>
                         @endif

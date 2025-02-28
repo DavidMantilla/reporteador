@@ -19,6 +19,8 @@ export const getEmpresas = async (page, pageSize) => {
     }
 };
 
+
+
 const showUser = (response) => {
     console.log(response);
 
@@ -50,6 +52,9 @@ const showUser = (response) => {
         }</span> </div>
                                         <div class="col-12" style="font-size: 12px"> <b>GUID:</b> <span>
                                                 13415056-AD43-40F9-92FB-D2145AE62351</span> </div><br>
+                                        <div class="col-12" style="font-size: 12px"> <br><br>
+                                        <a href="sucursales/${element.Id_Empresa}" class="btn btn-primary " style="color:#fff">sucursales</a>
+                                        </div><br>        
                                     </div>
                                 </div>
                             </div>  `;
@@ -57,6 +62,35 @@ const showUser = (response) => {
         usuario.append(container);
     });
 };
+
+
+const selectEmp=(response)=>{
+    console.log(response);
+    
+    const slempresa = document.getElementById("slempresa");
+    slempresa.innerHTML="<option value=''>Seleccione empresa</option>";
+    slempresa.style.textTransform="Capitalize";
+    response.forEach((element)=>{
+
+     let option=document.createElement("option");
+     option.style.textTransform="Capitalize";
+     option.value=`${element.Id_Empresa}`;
+     option.innerHTML=`${element.NomComercial.toLowerCase()}`
+     slempresa.append(option);
+
+    });
+} 
+
+
+if(document.getElementById("slempresa")){
+
+getEmpresas(0,100).then((response)=>{
+
+
+    selectEmp(response.value)
+})
+}
+
 
 if (document.getElementById("listEmpresa")) {
     getEmpresas(0, tamanopagina).then((response) => {
@@ -110,3 +144,7 @@ if (document.getElementById("listEmpresa")) {
         console.log(pagina);
     });
 }
+
+
+
+

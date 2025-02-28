@@ -1,8 +1,14 @@
 import './bootstrap';
-import'./data/login';
-import './data/nuevaemp';
-import './data/nuevoUsuario';
-import './data/userdata';
-import './data/empdata';
-import './data/editdataemp';
-import './data/editdatausu';
+// login
+import './services/login/login';
+// usuarios
+import './services/usuarios/nuevoUsuario';
+import './services/usuarios/editdatausu';
+import './services/usuarios/userdata';
+// empresa
+import './services/empresa/nuevaemp';
+import './services/empresa/empdata';
+import './services/empresa/editdataemp'
+
+//sucuersales
+import './services/sucursales/getSucursales'

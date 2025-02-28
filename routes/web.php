@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\authController;
+use Flat3\Lodata\Transaction\Option\Id;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,7 @@ Route::view('/login', 'login')->name("login");
 
 //auth empresa
 
-Route::middleware('auth:empresa')->get(
-    '/empresa',
+Route::middleware('auth:empresa')->get('/empresa',
     function (Request $request) {
         return view('empresa.empresa', ["request" => $request]);
     }
@@ -58,24 +58,51 @@ Route::middleware('auth:empresa')->get(
 
 //usuario
 
-
 Route::middleware('auth:web')->get(
     '/usuario',
     function (Request $request) {
         return view('usuario.usuario', ["request" => $request]);
     }
-)->name("usuario");
+)->name('usuario');
 
 Route::middleware('auth:web')->get(
     '/nuevaempresa',
     function (Request $request) {
-        return view('usuario.nuevaempresa',["request" => $request]);
+        return view('usuario.nuevaempresa', ["request" => $request]);
     }
-)->name("nuevaemp");
+)->name('nuevaemp');
 
 Route::middleware('auth:web')->get(
     '/nuevousuario',
     function (Request $request) {
-        return view('usuario.nuevousuario',["request" => $request]);
+        return view('usuario.nuevousuario', ["request" => $request]);
     }
-)->name("nuevousu");
+)->name('nuevousu');
+
+Route::middleware('auth:web')->get(
+    '/sucursales/{id}',
+    function ($id) {
+        return view('usuario.mostrarSucursales', ["id" => $id]);
+    }
+)->name('sucursales');
+
+
+
+
+Route::middleware('auth:web')->get(
+    '/nuevalicencia',
+    function (Request $request) {
+        return view('usuario.nuevalicencia', ["request" => $request]);
+    }
+)->name('nuevalicencia');
+
+
+
+Route::middleware('auth:web')->get(
+    '/nuevasucursal',
+    function (Request $request) {
+        return view('usuario.nuevasucursal', ["request" => $request]);
+    }
+)->name('nuevasucursal');
+
+

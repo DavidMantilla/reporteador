@@ -17,5 +17,10 @@ class sucursales extends Model
     {
         return $this->belongsTo(Empresa::class, 'Id_Empresa', 'Id_Empresa');
     }
+    #[LodataRelationship()]
+    public function licenciamientos()
+    {
+        return $this->hasMany(Licenciamiento::class, 'Id_Sucursal', 'Id_Sucursal');
+    }
 
 }
