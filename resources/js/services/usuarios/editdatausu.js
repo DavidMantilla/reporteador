@@ -1,11 +1,12 @@
 import axios from "axios";
 import { isEmpty } from "lodash";
+import config from'../../config/api';
 let EmpresaUrl = "";
 console.log(window.location.search);
 
 if (window.location.search != "") {
     let id = window.location.search.split("=")[1];
-    EmpresaUrl = `http://127.0.0.1:8000/odata/Users?$filter=(Id_Usuario eq ${id})`;
+    EmpresaUrl = `${config.OdataUrl}Users?$filter=(Id_Usuario eq ${id})`;
 }
 
 
@@ -40,4 +41,9 @@ const cargarData = async () => {
      
 };
 
-cargarData();
+
+if(document.getElementById("usuario")){
+
+    cargarData();
+
+}

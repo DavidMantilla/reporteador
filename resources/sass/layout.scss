@@ -1,18 +1,18 @@
 .sidebar{
     
 background-color: #fff;
-
-height: 150vh;
 box-shadow: 2px 1px 1px #ece1e1cc;
-min-width: 80px;
+min-width: 50px;
+min-height: 100vh;
 padding:0px;
 
 ul{
     margin-top: 60px;
     padding: 20px;
+
     li{
+        list-style: none;
         a{
-     list-style: none;
       padding: 10px;
       margin: 20px 0px ;
       font-size: 15px;
@@ -25,6 +25,7 @@ ul{
     
 
       @media screen and (max-width:'900px') {
+       
        
         a span{
 
@@ -77,11 +78,20 @@ ul{
 
 .card-body{
 
+    ul{
+        padding: 0px;
+        margin: auto;
+    }
+     
+    #productList{
+        height: 300px;
+        overflow-y: auto;
+    }
     .list{
 
       display: flex;
       justify-content: space-between;
-      padding: 2px;
+      padding: 1px;
       border-bottom: 1px solid #444;
 
     }
@@ -94,11 +104,75 @@ ul{
 
         border: 1.2px solid #000;
         margin: 2px  10px 10px 10px;
-        
+        min-width: 150px;
      }
 
-     
+     .btn{
+        margin: 2px  10px 10px 10px;
+     }
+
+     .dt-paging-button{
+     margin: 2px;
+     background-color: $primary;
+     border-radius: 8px;
+     padding: 8px 12px!important;
+     color: #fff!important;
+     border: none;
+
+
+     }
+     .dt-input{
+
+        border: 1.2px solid #000;
+        margin: 2px  10px 10px 10px;
+     }
  
 }
 }
 
+.col-md-2{
+    margin: 0;
+    padding: 2px;
+}
+
+.menuReporte>.card{
+    background-color: $primary;
+
+}
+.menuReporte:hover>.card{
+
+    background-color: $primary-dark;
+}
+
+.col-fixed-1{
+
+    width: 100px;
+    
+    }
+
+.col-fixed-2{
+
+width: 190px;
+height: 220px;
+margin: 5px;
+padding: 0px;
+
+}
+
+.col-fixed-3{
+
+    width: 300px;
+    
+}
+
+
+@media screen and (max-width:'970px') {
+   .row {
+    justify-content: center;
+    
+} 
+.col-10{
+    margin: 00px;
+    padding: 0px;
+}
+}

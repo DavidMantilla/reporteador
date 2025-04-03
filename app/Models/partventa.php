@@ -13,6 +13,7 @@ class partventa extends Model
 
     protected $fillable = [
         'Articulo',
+        'Descripcion',
         'No_Referen',
         'Serie',
         'Cantidad',

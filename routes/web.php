@@ -1,11 +1,19 @@
 <?php
 
 use App\Http\Controllers\authController;
+use App\Http\Controllers\LicenciamientoController;
+use App\Http\Controllers\PartventaController;
+use App\Http\Controllers\SucursalesController;
 use Flat3\Lodata\Transaction\Option\Id;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Exports\VentasExport;
+use App\Http\Controllers\VentasController;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Ventas;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,19 +31,12 @@ Route::get('/', function () {
     return redirect('login');
 })->name("home");
 
-//api login
-Route::post('/api/login', [authController::class, 'login'])->name("apiLogin");
-
-Route::post('/api/register', [authController::class, 'register'])->name("apiRegister");
-Route::post('/api/update', [authController::class, 'update'])->name("apiUpdate");
-Route::middleware(['auth:empresa','auth:web'])->post('/api/logout', [authController::class, 'logout'])->name("apiLogout");
-
-
 Route::view('/login', 'login')->name("login");
 
 //auth empresa
 
-Route::middleware('auth:empresa')->get('/empresa',
+Route::middleware('auth:empresa')->get(
+    '/empresa',
     function (Request $request) {
         return view('empresa.empresa', ["request" => $request]);
     }
@@ -49,7 +50,27 @@ Route::middleware('auth:empresa')->get(
     }
 )->name("empresa");
 
+Route::middleware('auth:empresa')->get(
+    '/reportes/periodo',
+    function (Request $request) {
+        return view('empresa.reportes.ventasperiodo', ["request" => $request]);
+    }
+)->name("periodo");
 
+Route::middleware('auth:empresa')->get(
+    '/reportes/comparativo',
+    function (Request $request) {
+        return view('empresa.reportes.comparativo', ["request" => $request]);
+    }
+)->name("comparativo");
+
+
+Route::middleware('auth:empresa')->get(
+    '/reportes/ventasMes',
+    function (Request $request) {
+        return view('empresa.reportes.ventasmes', ["request" => $request]);
+    }
+)->name("mes");
 
 
 
@@ -104,5 +125,3 @@ Route::middleware('auth:web')->get(
         return view('usuario.nuevasucursal', ["request" => $request]);
     }
 )->name('nuevasucursal');
-
-

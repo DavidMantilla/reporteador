@@ -65,7 +65,7 @@ function fetchEmp(event) {
     formData.append("Correo", event.target["Correo"].value);
     if (event.target.id) formData.append("id", event.target.id.value);
     formData.append("password", event.target["password"].value);
-    console.log(event.target.action);
+   
     axios
         .post(event.target.action, formData, {
             Headers: {

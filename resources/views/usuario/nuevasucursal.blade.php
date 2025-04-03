@@ -13,9 +13,10 @@
                     <div class="row justify-content-center">
                         <div class="col-11" style="padding-right: 10px">
                             
-                            <form action="{{$request->get('id')!=""?  Route('apiUpdate')  : Route('apiRegister') }}" method="post" id="empresa">
+                            <form action="{{Route('ApiNuevaSucursal')}}" method="post" id="formsucursal">
                                 <div class="row justify-content-start">
                                     @csrf
+                                    
                                     @php echo $request->get('id')!=""?"<input type='hidden' value='".$request->get('id')."' name='id'>":""; @endphp
                                     <div class="alert alert-danger" style="display: none" id="error">debes llenar todos los campos</div>
                                     <div class="alert alert-secondary" style="display: none" id="exito">se ha registrado el usuario con <b>éxito</b></b> </div>
@@ -28,14 +29,14 @@
                                     </div>
                                   
                                     <div class="col-md-6"><label class="label" for="">Sucursal</label>
-                                        <input type="text" class="form-control" name="Sucursal">
+                                        <input type="text" class="form-control" name="Sucursal" id="Sucursal">
                                     </div>
                                     
                                     <div class="col-md-6"><label class="label" for="">SUID</label>
-                                        <input type="text" class="form-control" name="SUID">
+                                        <input type="text" class="form-control" name="SUID" id="SUID">
                                     </div>
                                     <div class="col-md-6"><label class="label" for="">Estado</label> <br>
-                                        <input type="checkbox" class="form-check-input" name="Estado">
+                                        <input type="checkbox" class="form-check-input" name="Estado" id="Estado">
                                     </div>
                                     
                                     <div class="col-md-7" style="margin: auto">

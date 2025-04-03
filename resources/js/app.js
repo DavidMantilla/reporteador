@@ -1,4 +1,8 @@
 import './bootstrap';
+
+
+
+
 // login
 import './services/login/login';
 // usuarios
@@ -8,7 +12,27 @@ import './services/usuarios/userdata';
 // empresa
 import './services/empresa/nuevaemp';
 import './services/empresa/empdata';
-import './services/empresa/editdataemp'
+import './services/empresa/editdataemp';
 
-//sucuersales
-import './services/sucursales/getSucursales'
+//sucursales
+import './services/sucursales/getSucursalesLicencias';
+import './services/sucursales/getSucursales';
+import './services/sucursales/nuevasucursal';
+
+
+//licencia
+
+import './services/licencias/licencias';
+
+//ventas
+
+import './services/ventas/getVentas';
+import './services/ventas/getventasreporte'
+import './services/ventas/getcomparativo';
+import './services/ventas/getVentasMes';
+
+//partventas
+
+import './services/partventas/maxprod';
+
+

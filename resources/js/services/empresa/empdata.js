@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const EmpresasUrl = "http://127.0.0.1:8000/odata/Empresas";
+import config from'../../config/api';
+const EmpresasUrl = `${config.OdataUrl}/Empresas`;
 let total = 0;
 let pagina = 0;
 let tamanopagina = 9;

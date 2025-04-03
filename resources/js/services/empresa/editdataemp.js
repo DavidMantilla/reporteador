@@ -1,11 +1,14 @@
 import axios from "axios";
+import config from'../../config/api';
+
+
 
 let EmpresaUrl = "";
-console.log(window.location.search);
+
 
 if (window.location.search != "") {
     let id = window.location.search.split("=")[1];
-    EmpresaUrl = `http://127.0.0.1:8000/odata/Empresas?$filter=(Id_Empresa eq ${id})`;
+    EmpresaUrl = `${config.OdataUrl}Empresas?$filter=(Id_Empresa eq ${id})`;
 }
 
 
@@ -28,8 +31,8 @@ const getEmpresa = async () => {
 const cargarData = async () => {
      let response= await getEmpresa();
 
-     console.log(response[0]);
      if (document.getElementById("empresa")) {
+     
 
         let form =document.getElementById("empresa");
         form["NomComercial"].value=response[0]['NomComercial'];
@@ -42,4 +45,9 @@ const cargarData = async () => {
      
 };
 
-cargarData();
+
+if (document.getElementById("empresa") && EmpresaUrl) {
+
+    cargarData();
+
+}

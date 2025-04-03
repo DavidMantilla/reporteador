@@ -1,7 +1,7 @@
 import axios from "axios";
+import config from'../../config/api';
 
-
-const UsersUrl = "http://127.0.0.1:8000/odata/Users";
+const UsersUrl = `${config.OdataUrl}User`;
 let total = 0;
 let pagina = 0;
 let tamanopagina = 9;
