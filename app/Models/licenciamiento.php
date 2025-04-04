@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class licenciamiento extends Model
 {
     use HasFactory;
-    protected $table = "gg_licenciamiento";
+    protected $table = "GG_Licenciamiento";
     protected $primaryKey = "Id_Licencia";
 
     #[LodataRelationship()]

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ventas extends Model
 {
     use HasFactory;
-    protected $table = "gg_ventas";
+    protected $table = "GG_Ventas";
     protected $primaryKey = "Id_Ventas";
     protected $casts = [
         'FechaDoc' => 'datetime',

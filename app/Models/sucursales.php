@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class sucursales extends Model
 {
     use HasFactory;
-    protected $table = "gg_sucursales";
+    protected $table = "GG_Sucursales";
     protected $primaryKey = "Id_Sucursal";
     protected $fillable = ['Id_Sucursal', 'FechaAlta', 'Id_Empresa', 'SUID','Estado'];
     #[LodataRelationship()]
