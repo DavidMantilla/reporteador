@@ -20,7 +20,7 @@ class sucursales extends Model
     #[LodataRelationship()]
     public function licenciamientos()
     {
-        return $this->hasMany(Licenciamiento::class, 'Id_Sucursal', 'Id_Sucursal');
+        return $this->hasMany(licenciamiento::class, 'Id_Sucursal', 'Id_Sucursal');
     }
     #[LodataRelationship()]
     public function ventas()
