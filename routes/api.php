@@ -37,6 +37,8 @@ Route::middleware('auth:empresa')->get('/ventas/excel/comparativo', [VentasContr
 Route::middleware('auth:empresa')->get('/ventas/pdf/comparalltivo', [VentasController::class, "Pdfcomparativo"]);
 Route::middleware('auth:empresa')->get('/ventas/excel/mes', [VentasController::class, "excelMes"]);
 Route::middleware('auth:empresa')->get('/ventas/pdf/mes', [VentasController::class, "PdfMes"]);
+Route::middleware('auth:empresa')->get('/ventas/excel/anio', [VentasController::class, "excelAnio"]);
+Route::middleware('auth:empresa')->get('/ventas/pdf/anio', [VentasController::class, "PdfAnio"]);
 
 
 

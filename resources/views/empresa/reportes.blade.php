@@ -52,8 +52,8 @@
                     </div>
                 </a>
             </div>
-            <div class="col-fixed-2 d-none">
-                <a href="" class="menuReporte">
+            <div class="col-fixed-2 ">
+                <a href="{{Route('anio')}}" class="menuReporte">
                     <div class="card" style="height:90%;margin-left: auto">
                         <div class="card-body" style="margin-top:20px">
                            

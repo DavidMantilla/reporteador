@@ -8,26 +8,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <form action="" id="formMes">
+                        <form action="" id="formAnio">
                             <div class="row">
-                                <div class="col-md-3">
-
-                                    <label for="" style="font-weight: bold;min-width: 100px">Mes</label>
-                                    <select name="month" id="month" class="form-select">
-                                        <option value="1">Enero</option>
-                                        <option value="2">Febrero</option>
-                                        <option value="3">Marzo</option>
-                                        <option value="4">Abril</option>
-                                        <option value="5">Marzo</option>
-                                        <option value="6">Junio</option>
-                                        <option value="7">Julio</option>
-                                        <option value="8">Agosto</option>
-                                        <option value="9">Septiembre</option>
-                                        <option value="10">Octubre</option>
-                                        <option value="11">Noviembre</option>
-                                        <option value="12">Diciembre</option>
-                                    </select>
-                                </div>
                                 <div class="col-md-3">
                                     <label for="" style="font-weight: bold;min-width: 100px">Año</label>
                                     <select name="anio" id="anio" class="form-select">
@@ -63,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card" style="height: 95%">
                     <div class="card-header d-flex " style="justify-content: space-around; width: 100%">
-                        <b>Ventas mensuales</b>
+                        <b>Ventas por periodo</b>
                         <div>
                             <button class="btn btn-dark" style="background: #ec0808" id="AnioPdf"><i
                                     class="fa-solid fa-file-pdf"></i></button>
@@ -72,7 +54,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-responsive" style="border:1px solid #000;" id="mesTable">
+                        <table class="table table-responsive" style="border:1px solid #000;" id="Aniotable">
                             <tr>
                                 <th>Fecha</th>
                                 <th>Sucursal</th>

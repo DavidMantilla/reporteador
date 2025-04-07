@@ -73,6 +73,13 @@ Route::middleware('auth:empresa')->get(
 )->name("mes");
 
 
+Route::middleware('auth:empresa')->get(
+    '/reportes/ventasAnio',
+    function (Request $request) {
+        return view('empresa.reportes.ventasAnio', ["request" => $request]);
+    }
+)->name("anio");
+
 
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AnioExport;
 use App\Exports\ComparativoExport;
 use App\Exports\MesExport;
 use App\Exports\VentasExport;
@@ -138,7 +139,50 @@ class VentasController extends Controller
         });
         
         $pdf = Pdf::loadView('reportes.ventas', compact('ventas'));
-        return $pdf->download('ventas.pdf');
+        return $pdf->download('mes.pdf');
+    }
+
+    function ExcelAnio(Request $request)
+    {
+
+
+        return Excel::download(new AnioExport($request->input("year"),$request->input('sucursal'),$request->user('empresa')->Id_Empresa), 'ventas.xlsx');
+    }
+
+    public function PdfAnio(Request $request)
+    {
+        $ventas = Ventas::query();
+
+        $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
+            ->select('gg_ventas.*', 'gg_sucursales.Sucursal')
+            ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
+
+      
+        
+
+        if ($request->filled('year') ) {
+            $ventas->whereYear('FechaDoc', $request->input('year'));
+        }
+        if($request->filled('sucursal')){
+            $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));
+            
+        }
+   
+          
+      
+
+        $ventas = $ventas->get();
+        if ($ventas->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
+        }
+
+        $ventas->transform(function ($venta) {
+            $venta->Facturado = number_format($venta->Facturado, 2, '.', '');
+            return $venta;
+        });
+        
+        $pdf = Pdf::loadView('reportes.anual', compact('ventas'));
+        return $pdf->download('anual.pdf');
     }
 
 
