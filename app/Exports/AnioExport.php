@@ -6,10 +6,10 @@ use App\Models\Ventas;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class MesExport implements FromCollection,WithHeadings
+class AnioExport implements FromCollection,WithHeadings
 {
  
-    private $mes;
+
     private $anio;
     private $sucursal;
     private $empresa;
@@ -17,14 +17,14 @@ class MesExport implements FromCollection,WithHeadings
     /**
      * Create a new instance of the class.
      *
-     * @param string $mes
-     * @param string $anio
+     * @param string $desde
+     * @param string $hasta
      * @param int $sucursal
      * @param int $empresa
      */
-    public function __construct($mes, $anio,$sucursal, $empresa)
+    public function __construct($anio,$sucursal, $empresa)
     {
-        $this->mes = $mes;
+       
         $this->anio = $anio;
         $this->sucursal = $sucursal;
         $this->empresa = $empresa;
@@ -54,9 +54,7 @@ class MesExport implements FromCollection,WithHeadings
         
             $ventas->where('gg_sucursales.Id_Empresa', $this->empresa);
 
-        if ($this->mes) {
-            $ventas->whereRaw('month(FechaDoc)=?', $this->mes);
-        }
+      
         if ($this->anio) {
             $ventas->whereYear('FechaDoc', $this->anio);
         }
