@@ -172,6 +172,7 @@ class VentasController extends Controller
       
 
         $ventas = $ventas->get();
+       
         if ($ventas->isEmpty()) {
             return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
         }
@@ -181,6 +182,7 @@ class VentasController extends Controller
             return $venta;
         });
         
+      
         $pdf = Pdf::loadView('reportes.anual', compact('ventas'));
         return $pdf->download('anual.pdf');
     }
