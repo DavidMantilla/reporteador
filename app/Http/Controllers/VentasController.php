@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AnioExport;
 use App\Exports\ComparativoExport;
+use App\Exports\CompFechaExport;
 use App\Exports\MesExport;
 use App\Exports\VentasExport;
 use App\Models\ventas;
@@ -172,6 +173,7 @@ class VentasController extends Controller
       
 
         $ventas = $ventas->get();
+       
         if ($ventas->isEmpty()) {
             return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
         }
@@ -181,9 +183,45 @@ class VentasController extends Controller
             return $venta;
         });
         
+      
         $pdf = Pdf::loadView('reportes.anual', compact('ventas'));
         return $pdf->download('anual.pdf');
     }
 
+  
+    function PdfcomparativoFecha(Request $request)
+    {
+        $ventas = Ventas::query();
 
+        $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
+            ->select('gg_sucursales.Sucursal')
+            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
+
+        if($request->filled('sucursal')){
+            $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));
+            
+        }
+        
+        $ventas->groupBy('Anio','Mes','gg_sucursales.Sucursal');
+      
+        $ventas->orderBy('Anio', 'asc');
+
+     
+      
+
+        $ventas = $ventas->get();
+        if ($ventas->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
+        }
+
+    
+        
+        $pdf = Pdf::loadView('reportes.comparativofecha', compact('ventas'));
+        return $pdf->download('comparativo.pdf');
+    }
+
+    function ExcelComparativoFecha(Request $request){
+        return Excel::download(new CompFechaExport($request->input('sucursal'),$request->user('empresa')->Id_Empresa), 'comparativoFecha.xlsx');
+    }
 }

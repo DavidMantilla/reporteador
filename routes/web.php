@@ -81,6 +81,16 @@ Route::middleware('auth:empresa')->get(
 )->name("anio");
 
 
+Route::middleware('auth:empresa')->get(
+    '/reportes/comparativofecha',
+    function (Request $request) {
+        return view('empresa.reportes.comparativofecha
+        ', ["request" => $request]);
+    }
+)->name("comparativofecha");
+
+
+
 
 
 

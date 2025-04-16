@@ -24,10 +24,44 @@
     <script src="https://kit.fontawesome.com/84360baca8.js" crossorigin="anonymous"></script>
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-
+    <style>
+        /* Estilos para el preloader */
+        #preloader {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #fff;
+          z-index: 9999;
+        }
+    
+        /* Animación de spinner */
+        .spinner {
+          border: 8px solid #f3f3f3;
+          border-top: 8px solid #3498db;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          animation: spin 1s linear infinite;
+        }
+    
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      </style>
+    
 </head>
 
 <body>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -100,5 +134,16 @@
         </main>
     </div>
 </body>
+<script>
+    // Cuando la página se haya cargado completamente, ocultamos el preloader
+    window.addEventListener('load', function() {
+      const preloader = document.getElementById('preloader');
+        // Espera 1 segundo antes de ocultar el preloader
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 1000); // 1000 ms = 1 segundo
+      
+    });
+  </script>
 
 </html>

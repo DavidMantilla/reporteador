@@ -31,6 +31,7 @@ import './services/ventas/getventasreporte'
 import './services/ventas/getcomparativo';
 import './services/ventas/getVentasMes';
 import './services/ventas/getVentasAnio';
+import './services/ventas/getcomparativofecha';
 
 //partventas
 
