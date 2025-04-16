@@ -70,7 +70,7 @@
                 </a>
             </div>
             <div class="col-fixed-2 ">
-                <a href="" class="menuReporte">
+                <a href="{{Route('comparativofecha')}}" class="menuReporte">
                     <div class="card" style="height:90%;margin-left: auto">
                         <div class="card-body" style="margin-top:20px">
                            

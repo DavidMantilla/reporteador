@@ -34,12 +34,13 @@ Route::middleware('auth:empresa')->get(
 Route::middleware('auth:empresa')->get('/ventas/excel/periodo', [VentasController::class, "ExcelPeriodo"]);
 Route::middleware('auth:empresa')->get('/ventas/pdf/periodo', [VentasController::class, "Pdfperiodo"]);
 Route::middleware('auth:empresa')->get('/ventas/excel/comparativo', [VentasController::class, "ExcelComparativo"]);
-Route::middleware('auth:empresa')->get('/ventas/pdf/comparalltivo', [VentasController::class, "Pdfcomparativo"]);
+Route::middleware('auth:empresa')->get('/ventas/pdf/comparativo', [VentasController::class, "Pdfcomparativo"]);
 Route::middleware('auth:empresa')->get('/ventas/excel/mes', [VentasController::class, "excelMes"]);
 Route::middleware('auth:empresa')->get('/ventas/pdf/mes', [VentasController::class, "PdfMes"]);
 Route::middleware('auth:empresa')->get('/ventas/excel/anio', [VentasController::class, "excelAnio"]);
 Route::middleware('auth:empresa')->get('/ventas/pdf/anio', [VentasController::class, "PdfAnio"]);
-
+Route::middleware('auth:empresa')->get('/ventas/pdf/compafecha', [VentasController::class, "PdfcomparativoFecha"]);
+Route::middleware('auth:empresa')->get('/ventas/excel/compafecha', [VentasController::class, "ExcelComparativoFecha"]);
 
 
 Route::middleware('auth:web')->post(
