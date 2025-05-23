@@ -224,4 +224,26 @@ class VentasController extends Controller
     function ExcelComparativoFecha(Request $request){
         return Excel::download(new CompFechaExport($request->input('sucursal'),$request->user('empresa')->Id_Empresa), 'comparativoFecha.xlsx');
     }
+
+
+
+    function getventasHoras(Request $request){
+            
+  
+
+         $ventas = Ventas::query();
+        
+        
+        $ventas->selectRaw("HOUR(FechaDoc) AS Hora, AVG(Importe) AS Promedio_Ventas")
+
+            ->where('gg_ventas.Id_Empresa', $request->user('empresa')->Id_Empresa);
+       
+        if ($request->filled('initialDate') && $request->filled('finalDate')) {
+            $ventas->whereBetween('FechaDoc', [$request->input('initialDate'), $request->input('finalDate')]);
+        }
+          $ventas->groupByRaw('HOUR(FechaDoc)');
+        
+          return $ventas->get();
+          
+    }
 }

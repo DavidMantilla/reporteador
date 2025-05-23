@@ -37,7 +37,9 @@ Route::view('/login', 'login')->name("login");
 
 Route::middleware('auth:empresa')->get(
     '/empresa',
+    
     function (Request $request) {
+       
         return view('empresa.empresa', ["request" => $request]);
     }
 )->name("empresa");
@@ -88,6 +90,7 @@ Route::middleware('auth:empresa')->get(
         ', ["request" => $request]);
     }
 )->name("comparativofecha");
+
 
 
 

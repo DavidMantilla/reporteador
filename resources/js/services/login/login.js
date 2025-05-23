@@ -12,16 +12,18 @@ let login= (event) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (emailPattern.test(correo.value) && password.value != "") {
         let datos = { correo: correo.value, password: password.value };
-   
+        console.log(event.target.action);
         axios
             .post(event.target.action, datos)
             .then((response) => {
                
-                console.log(response.data);
-                
-                if (response.data == "usuario") {
+                const token = response.data.access_token;
+                localStorage.setItem("authToken", token);
+              
+               
+                if (response.data.tipo == "usuario") {
                    window.location.replace(`${event.target['ruta'].value}/usuario`);
-                } else if (response.data == "empresa") {
+                } else if (response.data.tipo == "empresa") {
                    window.location.replace(`${event.target['ruta'].value}/empresa`);
                 }
             })

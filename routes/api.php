@@ -41,7 +41,7 @@ Route::middleware('auth:empresa')->get('/ventas/excel/anio', [VentasController::
 Route::middleware('auth:empresa')->get('/ventas/pdf/anio', [VentasController::class, "PdfAnio"]);
 Route::middleware('auth:empresa')->get('/ventas/pdf/compafecha', [VentasController::class, "PdfcomparativoFecha"]);
 Route::middleware('auth:empresa')->get('/ventas/excel/compafecha', [VentasController::class, "ExcelComparativoFecha"]);
-
+Route::middleware('auth:empresa')->get('/ventas/reportes/hora', [VentasController::class, "getventasHoras"]);
 
 Route::middleware('auth:web')->post(
     '/nuevaSucursal',

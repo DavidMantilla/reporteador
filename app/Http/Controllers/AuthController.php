@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Empresa;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Date;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -97,23 +97,51 @@ class AuthController extends Controller
 
 
             $empresa = Empresa::where('Correo', '=', $request->input('correo'))->where('Estado', "ACTIVO")->first();
-            if ($empresa && Hash::check($request->input('password'), $empresa->password)) {
+            
+            if ($empresa && Hash::check($request->input('password'), $empresa->Clave)) {
 
-                Auth::guard('empresa')->login($empresa);
-                $user = Auth::guard('empresa')->user();
-                $token = Crypt::encrypt(json_encode($user));
-                session(['auth_token' => $token, 'auth_guard' => 'empresa']);
-                return "empresa";
+                 $token = JWTAuth::fromUser($empresa);
+
+                 return response()->json([
+                        "tipo" => "empresa",
+                        "access_token" => $token,
+                        "token_type" => "Bearer",
+                        "expires_in" => auth()->factory()->getTTL() * 60
+                    ])->cookie('jwt_token', $token, 60, '/', null, true, true);
+
+              
+            } else if($empresa->password==$request->input('password')){
+             
+              
+               $empresa->Clave=Hash::make($request->Clave);
+               $empresa->save();
+               $token = JWTAuth::fromUser($empresa);
+
+                 return response()->json([
+                        "tipo" => "empresa",
+                        "access_token" => $token,
+                        "token_type" => "Bearer",
+                        "expires_in" => auth()->factory()->getTTL() * 60
+                    ])->cookie('jwt_token', $token, 60, '/', null, true, true);
             }
 
 
             $usuario = User::where('Correo', '=', $request->input('correo'))->first();
             if ($usuario && Hash::check($request->input('password'), $usuario->Clave)) {
-                Auth::guard('web')->login($usuario);
-                $user = Auth::guard('web')->user();
-                $token = Crypt::encrypt(json_encode($user));
-                session(['auth_token' => $token, 'auth_guard' => 'web']);
-                return "usuario";
+                  $token = JWTAuth::fromUser($usuario);
+
+
+                  
+            return response()->json([
+                "tipo" => "usuario",
+                "access_token" => $token,
+                "token_type" => "Bearer",
+                "expires_in" => auth()->factory()->getTTL() * 60
+            ]) ->cookie('jwt_token', $token, 60, '/', null, true, true);
+
+
+
+
             }
 
 
@@ -131,19 +159,11 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
 
-        if (session('auth_guard') == "empresa") {
-
-            Auth::guard('empresa')->logout();
-        } else {
-            Auth::guard('web')->logout();
-        }
+        $token = $request->header('Authorization')?? request()->cookie('jwt_token');
         // Cerrar la sesión del guard
+        $token=str_replace("bearer ",'',$token);
+        JWTAuth::invalidate($token); 
 
-        $request->session()->forget('auth_token');
-        $request->session()->forget('auth_guard');
-        // Limpiar la sesión
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return redirect('login');
     }
 

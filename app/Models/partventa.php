@@ -12,12 +12,14 @@ class partventa extends Model
     protected $primaryKey = "Id_Ventas";
 
     protected $fillable = [
+        'Id_Ventas',
         'Articulo',
         'Descripcion',
         'No_Referen',
         'Serie',
         'Cantidad',
         'Precio',
-        'Descuento'
+        'Descuento',
+        'FechaDoc'
     ];
 }
