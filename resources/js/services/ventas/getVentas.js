@@ -25,6 +25,7 @@ async function CargarchartVentas(jsondata) {
         final = jsondata.ffin.value;
         SlSucursal = jsondata.SlSucursal.value;
         ventasEmpresa += ` and (FechaDoc ge ${inicio} and FechaDoc le ${final}) `;
+        ventasEmpresa += SlSucursal!=""?`and Id_Sucursal eq ${SlSucursal}`:'';
     }
     ventasEmpresa += `&$orderby=FechaDoc asc`;
 
@@ -214,12 +215,15 @@ async function CargarTotal(jsondata) {
         let cargarMeta = `?$filter=(Id_Empresa eq ${empresa.Id_Empresa})`;
         let inicio;
         let final;
-
+        let sucursal;
+ console.log(jsondata);
+ 
         if (jsondata) {
             inicio = jsondata.finicio.value;
             final = jsondata.ffin.value;
-            SlSucursal = jsondata.SlSucursal.value;
+            sucursal = jsondata.SlSucursal.value;
             cargarMeta += ` and (FechaDoc ge ${inicio} and FechaDoc le ${final}) `;
+            cargarMeta += sucursal!=""?`and Id_Sucursal eq ${sucursal}`:'';
         }
         cargarMeta += `&&$count=true`;
 
@@ -252,10 +256,18 @@ async function horas(jsondata) {
         final = jsondata.ffin.value;
         SlSucursal = jsondata.SlSucursal.value;
         query += `?initialDate=${inicio}&&finalDate=${final}`;
+        query += SlSucursal!=""?`&&sucursal=${SlSucursal}`:'';
     }
 
     try {
-        const response = await axios.get(query, { withCredentials: true });
+
+        let auth=localStorage.getItem('authToken');
+       
+        
+        const response = await axios.get(query,{headers:{
+
+            Authorization:"bearer "+auth
+        }});
         const data = response.data;
         let value=0;
          let valor=new Intl.NumberFormat("es-MX", {
@@ -306,6 +318,26 @@ async function horas(jsondata) {
     }
 }
 
+
+async function getSucursales(select){
+        let empresa = JSON.parse(document.getElementById("idempresa").value);
+        let filter = `?$filter=(Id_Empresa eq ${empresa.Id_Empresa})`;
+       const response = await axios.get(`${config.OdataUrl}sucursales${filter}`);
+       let data= response.data;
+    
+       data.value.forEach(element=>{
+
+        console.log(element);
+    let option=document.createElement("option");
+     option.value=element.Id_Sucursal;
+     option.innerText=element.Sucursal;
+     select.appendChild(option);
+        
+       })
+
+       return select;
+}
+
 let search = document.getElementById("search");
 
 if (search) {
@@ -318,7 +350,6 @@ if (search) {
         let SlSucursal = document.getElementById("SlSucursal");
 
         CargarTotal({ finicio, ffin, SlSucursal });
-        Cargarmetas({ finicio, ffin, SlSucursal });
         CargarchartVentas({ finicio, ffin, SlSucursal });
         horas({ finicio, ffin, SlSucursal });
         maxprod({ finicio, ffin, SlSucursal });
@@ -328,8 +359,8 @@ if (search) {
 if (document.getElementById("finicio")) {
     const initialDate = document.getElementById("finicio");
     const finalDate = document.getElementById("ffin");
-    const Suc = document.getElementById("SlSucursal");
-
+    let Suc = document.getElementById("SlSucursal");
+    getSucursales(Suc);
     const hoy = new Date();
     const anioActual = hoy.getFullYear();
     const mesActual = hoy.getMonth();

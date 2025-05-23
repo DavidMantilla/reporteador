@@ -241,6 +241,9 @@ class VentasController extends Controller
         if ($request->filled('initialDate') && $request->filled('finalDate')) {
             $ventas->whereBetween('FechaDoc', [$request->input('initialDate'), $request->input('finalDate')]);
         }
+          if($request->filled('sucursal')){
+            $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));
+        }
           $ventas->groupByRaw('HOUR(FechaDoc)');
         
           return $ventas->get();

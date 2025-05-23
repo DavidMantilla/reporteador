@@ -14,7 +14,11 @@ class PartventaController extends Controller
 
        $inicio=$request->input("inicio","");
        $final= $request->input("final","");
+       $sucursal= $request->input("sucursal","");
 
+       
+       
+      
         $producto=partventa::join('gg_ventas', 'gg_ventas.Id_Ventas', '=', 'gg_partvta.Id_Ventas')
         ->select(
             'gg_partvta.Articulo',
@@ -23,17 +27,27 @@ class PartventaController extends Controller
             DB::raw('SUM(gg_partvta.precio) as precio')
         )->where(
             'gg_ventas.Id_Empresa',$empresa 
-        )
-        ->whereBetween(
-            'gg_ventas.FechaDoc',[$inicio,$final] 
-        )
-        ->groupBy('gg_partvta.Articulo', 'gg_partvta.Descripcion')
+        );
+     
+        if( is_numeric($sucursal)){
+        $producto->where(
+            'gg_ventas.Id_Sucursal',$sucursal 
+        );
+    }
+  
+       if ($request->filled('inicio') && $request->filled('final')) {
+            $producto->whereBetween('gg_ventas.FechaDoc', [$request->input('inicio'), $request->input('final')]);
+        }
+
+        
+
+      $result=  $producto->groupBy('gg_partvta.Articulo', 'gg_partvta.Descripcion')
         ->orderBy('cantidad', 'desc')
         ->limit(10)
         ->get();
 
 
-        return $producto;
+         return $result;
      }
 
 
