@@ -16,6 +16,7 @@ async function getVentas(url) {
 async function CargarchartVentas(jsondata) {
     let inicio;
     let final;
+    let SlSucursal;
     let empresa = JSON.parse(document.getElementById("idempresa").value);
 
     let ventasEmpresa = `?$filter=Id_Empresa eq ${empresa.Id_Empresa}`;
@@ -248,6 +249,7 @@ async function CargarTotal(jsondata) {
 async function horas(jsondata) {
     let inicio;
     let final;
+    let SlSucursal;
     let query = `${config.apiUrl}ventas/reportes/hora`;
     console.log(query);
 
