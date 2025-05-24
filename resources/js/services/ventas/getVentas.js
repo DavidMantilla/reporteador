@@ -283,10 +283,10 @@ async function horas(jsondata) {
             data.forEach((element) => {
                 let hora = element.Hora - 12;
                 let horastr = "";
-                if (hora > 0) {
-                    horastr = "" + hora + ":00 a.m.";
+                if (hora < 0) {
+                    horastr = "" + element.Hora + ":00 a.m.";
                 } else {
-                    horastr = "" + element.Hora + ":00 p.m.";
+                    horastr = "" + hora + ":00 p.m.";
                 }
                
 
