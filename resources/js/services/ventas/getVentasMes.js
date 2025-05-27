@@ -96,9 +96,10 @@ async function getventasMonth(event) {
 
 if (document.getElementById("mesTable") != null) {
     (async () => {
-        let response = await getVentas("");
-        console.log(response);
-
+        let empresa = JSON.parse(document.getElementById("idempresa").value);
+        
+        let response = await getVentas( `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})`);
+      
         let jsonData = response.data["value"];
         inicializeventasTable(jsonData);
     })();

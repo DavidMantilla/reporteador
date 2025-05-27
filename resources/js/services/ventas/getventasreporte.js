@@ -93,7 +93,9 @@ async function getventasperiodo(event) {
 
 if (document.getElementById("ventastable") != null) {
     (async () => {
-        let response = await getVentas("");
+
+        let empresa = JSON.parse(document.getElementById("idempresa").value);
+        let response = await getVentas(`&$filter=(Id_Empresa eq ${empresa.Id_Empresa}) `);
         console.log(response);
         
         let jsonData = response.data["value"];
