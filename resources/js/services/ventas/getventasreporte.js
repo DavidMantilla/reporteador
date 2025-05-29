@@ -65,11 +65,12 @@ function inicializeventasTable(jsonData) {
 
 
 
-async function getventasperiodo(event) {
-    event.preventDefault();
-    fechaInicial = event.target["intialDate"].value;
-    fechaFinal = event.target["finalDate"].value;
-    sucursal = event.target["sucursal"].value;
+async function getventasperiodo(Data) {
+    console.log(Data);
+    
+    let fechaInicial = Data["fechaInicial"];
+    let fechaFinal = Data["fechaFinal"];
+    let sucursal = Data["sucursal"];
 
     let empresa = JSON.parse(document.getElementById("idempresa").value);
     let periodo = `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})${
@@ -92,16 +93,8 @@ async function getventasperiodo(event) {
 
 
 if (document.getElementById("ventastable") != null) {
-    (async () => {
-
-        let empresa = JSON.parse(document.getElementById("idempresa").value);
-        let response = await getVentas(`&$filter=(Id_Empresa eq ${empresa.Id_Empresa}) `);
-        console.log(response);
-        
-        let jsonData = response.data["value"];
-        inicializeventasTable(jsonData);
-       
-    })();
+    
+    
 }
 
 
@@ -137,7 +130,26 @@ if (ventasPdf) {
 
 let formPeriodo = document.getElementById("formPeriodo");
 if (formPeriodo != null) {
-    formPeriodo.addEventListener("submit", getventasperiodo);
+     
+   let fechaInicial=formPeriodo.elements['intialDate'];
+   let fechaFinal=formPeriodo.elements['finalDate'];
+   let sucursal=formPeriodo.elements['filsucursal'];
+   const hoy = new Date();
+    const anioActual = hoy.getFullYear();
+    const mesActual = hoy.getMonth();
+
+    fechaInicial.value = new Date(anioActual, mesActual, 1).toISOString().split("T")[0]; // Primer día del mes
+    fechaFinal.value= new Date(anioActual, mesActual + 1, 0).toISOString().split("T")[0]; // Último día del mes
+   console.log(formPeriodo['filsucursal']);
+   
+     getventasperiodo({"fechaInicial":fechaInicial.value,"fechaFinal":fechaFinal.value,"sucursal":sucursal.value});
+
+    formPeriodo.addEventListener("submit",(event)=>{ 
+        event.preventDefault();
+    let fechaInicial = event.target["intialDate"].value;
+    let fechaFinal = event.target["finalDate"].value;
+    let sucursal = event.target["sucursal"].value;
+        getventasperiodo({fechaInicial,fechaFinal,sucursal})});
 }
 
 

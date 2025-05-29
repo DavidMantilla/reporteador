@@ -239,7 +239,13 @@ class VentasController extends Controller
             ->where('gg_ventas.Id_Empresa', $request->user('empresa')->Id_Empresa);
        
         if ($request->filled('initialDate') && $request->filled('finalDate')) {
-            $ventas->whereBetween('FechaDoc', [$request->input('initialDate'), $request->input('finalDate')]);
+
+            if($request->input('initialDate')!=$request->input('finalDate')){
+
+                $ventas->whereBetween('FechaDoc', [$request->input('initialDate'), $request->input('finalDate')]);
+            }else{
+                $ventas->whereDate('FechaDoc',$request->input('finalDate'));
+            }
         }
           if($request->filled('sucursal')){
             $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));

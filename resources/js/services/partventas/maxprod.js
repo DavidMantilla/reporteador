@@ -12,7 +12,10 @@ async function maxProd(jsondata) {
             const inicio = jsondata.finicio.value;
             const final = jsondata.ffin.value;
             const SlSucursal = jsondata.SlSucursal.value;
-            api += `?inicio= ${inicio} && final= ${final}`;
+            if(inicio!=final){
+                api += `?inicio= ${inicio} && final= ${final}`;
+            }
+            
             api += SlSucursal!=""?`&&sucursal=${SlSucursal}`:'';
         }
 

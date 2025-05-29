@@ -13,11 +13,11 @@
                                 <div class="col-md-3">
 
                                     <label for="" style="font-weight: bold;min-width: 100px">Fecha inicial</label>
-                                    <input type="date" class="form-control" name="intialDate">
+                                    <input type="date" class="form-control" name="intialDate" id="intialDate">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="" style="font-weight: bold;min-width: 100px">Fecha final</label>
-                                    <input type="date" class="form-control" name="finalDate">
+                                    <input type="date" class="form-control" name="finalDate" id="finalDate">
                                 </div>
                                 <div class="col-md-3">
                                     <label for="" style="font-weight: bold;min-width: 100px">Sucursal</label>

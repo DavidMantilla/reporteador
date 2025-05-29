@@ -25,7 +25,12 @@ async function CargarchartVentas(jsondata) {
         inicio = jsondata.finicio.value;
         final = jsondata.ffin.value;
         SlSucursal = jsondata.SlSucursal.value;
+        if(inicio !== final){
         ventasEmpresa += ` and (FechaDoc ge ${inicio} and FechaDoc le ${final}) `;
+        }else{
+
+       ventasEmpresa += ` and date(FechaDoc) eq ${inicio}  `;
+        }
         ventasEmpresa += SlSucursal!=""?`and Id_Sucursal eq ${SlSucursal}`:'';
     }
     ventasEmpresa += `&$orderby=FechaDoc asc`;
@@ -223,10 +228,16 @@ async function CargarTotal(jsondata) {
             inicio = jsondata.finicio.value;
             final = jsondata.ffin.value;
             sucursal = jsondata.SlSucursal.value;
-            cargarMeta += ` and (FechaDoc ge ${inicio} and FechaDoc le ${final}) `;
-            cargarMeta += sucursal!=""?`and Id_Sucursal eq ${sucursal}`:'';
+            if(inicio !== final){
+
+                cargarMeta += ` and (FechaDoc ge ${inicio} and FechaDoc lt ${final}) `;
+            }else{
+            cargarMeta += ` and date(FechaDoc) eq ${inicio}`;
+
+            }
+            cargarMeta += sucursal!=""?`and Id_Sucursal le ${sucursal}`:'';
         }
-        cargarMeta += `&&$count=true`;
+        cargarMeta += `&$count=true`;
 
         console.log("Total: " + cargarMeta);
 
@@ -278,6 +289,7 @@ async function horas(jsondata) {
                 });
         if (data) {
             let produc = document.getElementById("horas");
+            produc.innerHTML="";
             produc.style.listStyle = "none";
             produc.style.fontWeight = "400";
             data.forEach((element) => {

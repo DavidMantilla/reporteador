@@ -36,7 +36,14 @@ class PartventaController extends Controller
     }
   
        if ($request->filled('inicio') && $request->filled('final')) {
-            $producto->whereBetween('gg_ventas.FechaDoc', [$request->input('inicio'), $request->input('final')]);
+
+          if($request->filled('inicio')!=$request->filled('final')){
+              $producto->whereBetween('gg_ventas.FechaDoc', [$request->input('inicio'), $request->input('final')]);
+
+          }else{
+
+             $producto->whereDate('gg_ventas.FechaDoc',$request->input('inicio'));
+          }
         }
 
         
