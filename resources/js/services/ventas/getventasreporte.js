@@ -50,7 +50,7 @@ function inicializeventasTable(jsonData) {
 
                           let valor = new Intl.NumberFormat("es-MX", {
                                 style: "currency",
-                                currency: "MXN", // Puedes cambiar a USD, EUR, etc.
+                                currency: row.Moneda.replace("MN","MXN").replace("mx","MXN"), // Puedes cambiar a USD, EUR, etc.
                             });
                             return valor.format(data);
 
@@ -61,7 +61,7 @@ function inicializeventasTable(jsonData) {
 
                           let valor = new Intl.NumberFormat("es-MX", {
                                 style: "currency",
-                                currency: "MXN", // Puedes cambiar a USD, EUR, etc.
+                                currency: row.Moneda.replace("MN","MXN").replace("mx","MXN"), // Puedes cambiar a USD, EUR, etc.
                             });
                             return valor.format(data);
 
@@ -73,7 +73,7 @@ function inicializeventasTable(jsonData) {
                             // Calcular el total restando el descuento del importe y sumando el impuesto
                             let valor = new Intl.NumberFormat("es-MX", {
                                 style: "currency",
-                                currency: "MXN", // Puedes cambiar a USD, EUR, etc.
+                                currency: row.Moneda.replace("MN","MXN").replace("mx","MXN"), // Puedes cambiar a USD, EUR, etc.
                             });
 
                             return valor.format(

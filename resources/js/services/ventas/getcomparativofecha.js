@@ -18,6 +18,22 @@ async function getVentas(url) {
         throw error;
     }
 }
+async function getApiVentas(url) {
+    try {
+        let uri = `${config.apiUrl}ventas/reportes/${url}`;
+        console.log(uri);
+        let auth = localStorage.getItem("authToken");
+        const response = await axios.get(decodeURI(uri), {
+            headers: {
+                Authorization: "bearer " + auth,
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        throw error;
+    }
+}
 
 async function CargarchartVentas(chartData, chartLabel) {
     console.log(chartData);
@@ -35,22 +51,36 @@ async function CargarchartVentas(chartData, chartLabel) {
             options: {
                 scales: {
                     x: {
-                        title: { display: true, text: "Año" },
+                        title: { display: true, text: "Meses" },
                     },
                     y: {
                         beginAtZero: true,
                         title: { display: true, text: "Total Ventas" },
+                        ticks: {
+                                callback: function (value) {
+                                    // Formatear las etiquetas del eje Y como pesos colombianos
+                                    return `$${value.toLocaleString()} `;
+                                },
+                            },
                     },
                 },
 
                 responsive: true,
+                plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    // Formatear el valor como pesos colombianos
+                                    return `$${context.raw.toLocaleString()}`;
+                                },
+                            },
+                        },
+                    },
             },
         });
-    }else{
-
+    } else {
         chartcomp.data.datasets = chartData;
         chartcomp.update();
-
     }
 }
 
@@ -58,21 +88,27 @@ async function getventasComparativo(event) {
     event.preventDefault();
 
     sucursal = event.target["filsucursal"].value;
-    
+
     let empresa = JSON.parse(document.getElementById("idempresa").value);
     let periodo = `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})${
         sucursal !== "" ? ` and Id_Sucursal eq ${sucursal}` : ""
     }`;
 
-    let response = await getVentas(periodo);
-    let jsonData = response.data["value"];
+    // let response = await getVentas(periodo);
+    // let jsonData = response.data["value"];
+    // ;
+
+    let response = await getApiVentas("compafecha");
+    let jsonData = response.data;
+
     comparativo(jsonData);
 }
 
 function comparativo(data) {
     let res = data.reduce((acumulador, venta) => {
-        const anio = new Date(venta.FechaDoc).getFullYear();
-        const mes = new Date(venta.FechaDoc).getMonth() + 1; // Mes en formato 1-12
+        let anio = venta.Anio;
+        let mes = venta.Mes;
+
         if (!acumulador[anio]) {
             acumulador[anio] = {
                 meses: Array(12).fill(0),
@@ -81,33 +117,35 @@ function comparativo(data) {
                 Total_Ventas: 0,
             };
         }
-
-        acumulador[anio].meses[mes - 1] = parseFloat(
-            (venta.Importe - venta.Descuento + venta.Impuesto) *
-                venta.TipoCambio
-        ).toFixed(2);
-        acumulador[anio].Sucursal = venta.sucursales.Sucursal;
-        acumulador[anio].Total_Ventas +=
-            (venta.Importe - venta.Descuento + venta.Impuesto) *
-            venta.TipoCambio;
+        let valor= Intl.NumberFormat();
+        acumulador[anio].meses[mes - 1] = venta.Total_ventas;
+        acumulador[anio].Total_Ventas+= parseInt(venta.Total_ventas);
+        // Si deseas usar los siguientes campos, descomenta y ajusta según estructura:
         acumulador[anio].Numero_Transacciones += 1;
+
         return acumulador;
     }, {});
 
-    const resultado = Object.entries(res).map(([anio, datos]) => ({
-        meses: datos.meses,
+    console.log(res);
 
-        // Asegúrate de que esto sea un array de números
-        Numero_Transacciones: datos.Numero_Transacciones,
-        Anio: anio,
-        Total_Ventas: datos.Total_Ventas,
-        Sucursal: datos.Sucursal,
-    }));
+    const resultado = Object.entries(res).map(([anio, datos]) => {
+        console.log(anio); // Aquí sí puedes usarlo
+        //let valor= Intl.NumberFormat();
+       //datos.Total_Ventas= valor.format(datos.Total_Ventas);
+        return {
+            Anio: anio,
+            ...datos,
+        };
+    });
+
+    
 
     let anioAct = "";
 
     let chartData = [];
     resultado.map((item) => {
+        console.log(item);
+        
         chartData.push({
             label: "Total Ventas año " + item.Anio,
             data: item.meses,
@@ -138,12 +176,18 @@ function comparativo(data) {
             table = new DataTable("#compFechaTable", {
                 data: resultado,
                 columns: [
-                    { data: "Sucursal", title: "Sucursal" },
+                 
                     {
-                        data: "Anio",
-                        title: "Año",
+                        data: "Anio", title: "Año"
                     },
-                    { data: "Total_Ventas", title: "Total Ventas" },
+                    { data: "Total_Ventas",render:function(data, type, row){
+                        let valor=new Intl.NumberFormat("es-MX", {
+                             style: "currency",
+                             currency: "MXN", // Puedes cambiar a USD, EUR, etc.
+                             });   
+                             
+                             return valor.format(data);
+                        }, title: "Total Ventas" },
                     {
                         data: "meses",
                         render: function (data, type, row) {
@@ -164,7 +208,11 @@ function comparativo(data) {
 
                             let mesesData = data.map((mes, index) => {
                                 if (mes !== 0) {
-                                    return `<b>${meses[index]}</b>: ${mes}`;
+                                    let valor=new Intl.NumberFormat("es-MX", {
+                    style: "currency",
+                    currency: "MXN", // Puedes cambiar a USD, EUR, etc.
+                });
+                                    return `<b>${meses[index]}</b>: ${valor.format(mes)}`;
                                 } else {
                                     return "";
                                 }
@@ -214,16 +262,7 @@ if (ventasPdf) {
     });
 }
 
-if (document.getElementById("compFechaTable") != null) {
-    (async () => {
-        let response = await getVentas("");
-
-        let jsonData = response.data["value"];
-        comparativo(jsonData);
-    })();
-}
-
 let formComparativo = document.getElementById("formComparativofecha");
 if (formComparativo != null) {
-    formComparativo.addEventListener("submit", getventasComparativo);
+    formComparativo.addEventListener("submit",(evt)=>{ getventasComparativo(evt)});
 }

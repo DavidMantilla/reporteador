@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <br>
-                                    <button class="btn btn-primary " style="color: aliceblue;">Consultar</button>
+                                    <button class="btn btn-primary "  style="color: aliceblue;">Consultar</button>
                                 </div>
 
                             </div>

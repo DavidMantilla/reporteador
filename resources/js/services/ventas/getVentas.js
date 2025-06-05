@@ -222,7 +222,7 @@ async function CargarTotal(jsondata) {
         let inicio;
         let final;
         let sucursal;
- console.log(jsondata);
+ 
  
         if (jsondata) {
             inicio = jsondata.finicio.value;
@@ -239,7 +239,7 @@ async function CargarTotal(jsondata) {
         }
         cargarMeta += `&$count=true`;
 
-        console.log("Total: " + cargarMeta);
+        
 
         let response = await getVentas(cargarMeta);
         let data = response.data;

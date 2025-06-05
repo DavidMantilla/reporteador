@@ -36,14 +36,14 @@
         </thead>
         <tbody>
             @foreach ($ventas as $venta)
-            <tr>
+            <tr> 
                 <td>{{ date("d/m/Y", strtotime($venta->FechaDoc)) }}</td>
                 <td>{{ $venta->Sucursal }}</td>
                 <td>{{ $venta->NombreCliente }}</td>
                 <td>{{ $venta->Moneda }}</td>
-                <td>{{ $venta->Importe }}</td>
-                <td>{{ $venta->Impuesto }}</td>
-                <td>{{ $venta->Importe-$venta->Descuento+$venta->Impuesto }}</td>
+                <td>${{ number_format($venta->Importe, 2, ',', '.') }}</td>
+                <td>${{  number_format($venta->Impuesto, 2, ',', '.') }}</td>
+                <td>${{ number_format($venta->Importe-$venta->Descuento+$venta->Impuesto, 2, ',', '.') }}</td>
             </tr>
             @endforeach
         </tbody>

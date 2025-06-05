@@ -8,7 +8,9 @@ let sucursal = "";
 
 async function getVentas(url) {
     try {
-        console.log(encodeURI(`${config.OdataUrl}ventas?$expand=sucursales${url}`));
+        console.log(
+            encodeURI(`${config.OdataUrl}ventas?$expand=sucursales${url}`)
+        );
 
         const response = await axios.get(
             encodeURI(`${config.OdataUrl}ventas?$expand=sucursales${url}`)
@@ -31,7 +33,7 @@ function inicializeventasTable(jsonData) {
                         data: "FechaDoc",
                         render: function (data, type, row) {
                             data = new Date(data);
-                          
+
                             return data.toISOString().split("T")[0];
                         },
                         title: "Fecha",
@@ -45,14 +47,51 @@ function inicializeventasTable(jsonData) {
                     },
                     { data: "Cliente", title: "código cliente" },
                     { data: "NombreCliente", title: "Nombre Cliente" },
-                    { data: "Importe", title: "Importe" },
+                    {
+                        data: "Importe",
+                        render: (data, type, row) => {
+                            let valor = new Intl.NumberFormat("es-MX", {
+                                style: "currency",
+                                currency: row.Moneda.replace(
+                                    "MN",
+                                    "MXN"
+                                ).replace("mx", "MXN"), // Puedes cambiar a USD, EUR, etc.
+                            });
+
+                            return valor.format(data);
+                        },
+                        title: "Importe",
+                    },
                     { data: "Moneda", title: "Moneda" },
-                    { data: "Impuesto", title: "Impuesto" },
+                    {
+                        data: "Impuesto",
+                        render: (data, type, row) => {
+                            let valor = new Intl.NumberFormat("es-MX", {
+                                style: "currency",
+                                currency: row.Moneda.replace(
+                                    "MN",
+                                    "MXN"
+                                ).replace("mx", "MXN"), // Puedes cambiar a USD, EUR, etc.
+                            });
+
+                            return valor.format(data);
+                        },
+                        title: "Impuesto",
+                    },
                     {
                         data: "Total",
                         render: function (data, type, row) {
                             // Calcular el total restando el descuento del importe y sumando el impuesto
-                            return row.Importe - row.Descuento + row.Impuesto;
+                            let valor = new Intl.NumberFormat("es-MX", {
+                                style: "currency",
+                                currency: row.Moneda.replace(
+                                    "MN",
+                                    "MXN"
+                                ).replace("mx", "MXN"), // Puedes cambiar a USD, EUR, etc.
+                            });
+                            return valor.format(
+                                row.Importe - row.Descuento + row.Impuesto
+                            );
                         },
                         title: "Total",
                     },
@@ -67,50 +106,38 @@ function inicializeventasTable(jsonData) {
     }
 }
 
-async function getventasAnio(event) {
-    event.preventDefault();
-  
-    anio = event.target["anio"].value;
-    sucursal = event.target["sucursal"].value;
+async function getventasAnio(data) {
+
+
+    anio = data["anio"];
+    sucursal =data["sucursal"] ;
 
     let empresa = JSON.parse(document.getElementById("idempresa").value);
-    let periodo = `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})${
-        sucursal !== "" ? ` and Id_Sucursal eq ${sucursal}` : "" }${
-        anio != ""
-            ? ` and year(FechaDoc) eq ${anio}`
-            : ""
-    }`;
 
+    let periodo = `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})`;
 
-    
-    
+    if (sucursal != "") {
+        periodo += `${
+            sucursal !== "" ? ` and Id_Sucursal eq ${sucursal}` : ""
+        }`;
+    }
+    periodo += `${anio != "" ? ` and year(FechaDoc) eq ${anio}` : ""}`;
+
     let response = await getVentas(periodo);
     let jsonData = response.data["value"];
 
     inicializeventasTable(jsonData);
 }
 
-if (document.getElementById("Aniotable") != null) {
-
-    
-    (async () => {
-        let response = await getVentas("");
-       
-        let jsonData = response.data["value"];
-      
-        inicializeventasTable(jsonData);
-    })();
-}
-
 let exportExcel = async () => {
-
     let url = `${config.apiUrl}ventas/excel/anio?year=${anio}&sucursal=${sucursal}`;
     window.location.href = url;
 };
 
 let exportPdf = async () => {
-  
-    let url = encodeURI(`${config.apiUrl}ventas/pdf/anio?year=${anio}&sucursal=${sucursal}`);
+    let url = encodeURI(
+        `${config.apiUrl}ventas/pdf/anio?year=${anio}&sucursal=${sucursal}`
+    );
     console.log(url);
     window.location.href = url;
 };
@@ -127,9 +154,18 @@ if (ventasPdf) {
     ventasPdf.addEventListener("click", () => {
         exportPdf();
     });
- }
+}
 
 let formMes = document.getElementById("formAnio");
 if (formMes != null) {
-    formMes.addEventListener("submit", getventasAnio);
+    
+    let hoy = new Date();
+    formMes["anio"].value= hoy.getFullYear();
+    getventasAnio({'anio':hoy.getFullYear(),"sucursal":""});
+    formMes.addEventListener("submit", (event) => {
+        event.preventDefault();
+        anio = event.target["anio"].value;
+        sucursal = event.target["sucursal"].value;
+        getventasAnio({ anio, sucursal });
+    });
 }

@@ -96,7 +96,37 @@ class VentasController extends Controller
         $pdf = Pdf::loadView('reportes.comparativo', compact('ventas'));
         return $pdf->download('comparativo.pdf');
     }
+    public function Comparativo(Request $request)
+    {
+        $ventas = Ventas::query();
 
+        $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
+            ->select('gg_sucursales.Sucursal')
+            ->selectRaw('Year(FechaDoc) as Anio,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
+
+        if($request->filled('sucursal')){
+            $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));
+            
+        }
+        
+        $ventas->groupBy('Anio','gg_sucursales.Sucursal');
+        $ventas->orderBy('Anio', 'desc');
+
+     
+      
+
+        $ventas = $ventas->get();
+        if ($ventas->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
+        }
+
+    
+        
+     
+       
+      return $ventas;
+    }
 
     function ExcelMes(Request $request)
     {
@@ -219,6 +249,37 @@ class VentasController extends Controller
         
         $pdf = Pdf::loadView('reportes.comparativofecha', compact('ventas'));
         return $pdf->download('comparativo.pdf');
+    }
+
+    
+    function ComparativoFecha(Request $request)
+    {
+        $ventas = Ventas::query();
+
+        $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
+            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
+
+        if($request->filled('sucursal')){
+            $ventas->where('gg_ventas.Id_Sucursal', $request->input('sucursal'));
+            
+        }
+        
+        $ventas->groupBy('Anio','Mes');
+      
+        $ventas->orderBy('Anio', 'asc');
+
+     
+           
+
+        $ventas = $ventas->get();
+        if ($ventas->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
+        }
+
+    
+        
+        return $ventas;
     }
 
     function ExcelComparativoFecha(Request $request){
