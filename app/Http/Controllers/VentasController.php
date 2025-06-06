@@ -72,7 +72,7 @@ class VentasController extends Controller
 
         $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
             ->select('gg_sucursales.Sucursal')
-            ->selectRaw('Year(FechaDoc) as Anio,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('Year(FechaDoc) as Anio,Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)*gg_ventas.TipoCambio) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
 
         if($request->filled('sucursal')){
@@ -102,7 +102,7 @@ class VentasController extends Controller
 
         $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
             ->select('gg_sucursales.Sucursal')
-            ->selectRaw('Year(FechaDoc) as Anio,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('Year(FechaDoc) as Anio,Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)*gg_ventas.TipoCambio) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
 
         if($request->filled('sucursal')){
@@ -117,12 +117,13 @@ class VentasController extends Controller
       
 
         $ventas = $ventas->get();
+        
         if ($ventas->isEmpty()) {
             return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
         }
 
     
-        
+     
      
        
       return $ventas;
@@ -225,7 +226,7 @@ class VentasController extends Controller
 
         $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
             ->select('gg_sucursales.Sucursal')
-            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)*gg_ventas.TipoCambio) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
 
         if($request->filled('sucursal')){
@@ -257,7 +258,7 @@ class VentasController extends Controller
         $ventas = Ventas::query();
 
         $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
-            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('Year(FechaDoc) as Anio,month(FechaDoc) as Mes,Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)*gg_ventas.TipoCambio) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $request->user('empresa')->Id_Empresa);
 
         if($request->filled('sucursal')){
@@ -271,8 +272,9 @@ class VentasController extends Controller
 
      
            
-
+      
         $ventas = $ventas->get();
+        
         if ($ventas->isEmpty()) {
             return response()->json(['message' => 'No se encontraron registros para los filtros aplicados.'], 404);
         }

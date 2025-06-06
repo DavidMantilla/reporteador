@@ -49,7 +49,7 @@ class ComparativoExport implements FromCollection,WithHeadings
 
         $ventas->join('gg_sucursales','gg_sucursales.Id_Sucursal','=','gg_ventas.Id_Sucursal')
             ->select( 'gg_sucursales.Sucursal')
-            ->selectRaw('Year(FechaDoc) as Anio,Sum(gg_ventas.Importe) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('Year(FechaDoc) as Anio,Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)*gg_ventas.TipoCambio) as Total_ventas, count(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $this->empresa );
 
         if($this->sucursal){

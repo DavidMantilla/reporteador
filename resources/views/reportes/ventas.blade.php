@@ -43,7 +43,7 @@
                 <td>{{ $venta->Moneda }}</td>
                 <td>${{ number_format($venta->Importe, 2, ',', '.') }}</td>
                 <td>${{  number_format($venta->Impuesto, 2, ',', '.') }}</td>
-                <td>${{ number_format($venta->Importe-$venta->Descuento+$venta->Impuesto, 2, ',', '.') }}</td>
+                <td>${{ number_format(($venta->Importe-$venta->Descuento+$venta->Impuesto)*$venta->TipoCambio, 2, ',', '.') }}</td>
             </tr>
             @endforeach
         </tbody>

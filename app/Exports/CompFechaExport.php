@@ -25,7 +25,7 @@ class CompFechaExport implements FromArray, WithEvents
 
         $ventas->join('gg_sucursales', 'gg_sucursales.Id_Sucursal', '=', 'gg_ventas.Id_Sucursal')
             ->select('gg_sucursales.Sucursal')
-            ->selectRaw('YEAR(FechaDoc) as Anio, MONTH(FechaDoc) as Mes, SUM(gg_ventas.Importe) as Total_ventas, COUNT(gg_ventas.Id_Ventas) as Numero_Transacciones')
+            ->selectRaw('YEAR(FechaDoc) as Anio, MONTH(FechaDoc) as Mes, Sum((gg_ventas.Importe-gg_ventas.Descuento+gg_ventas.Impuesto)) as Total_ventas, COUNT(gg_ventas.Id_Ventas) as Numero_Transacciones')
             ->where('gg_sucursales.Id_Empresa', $this->empresa);
         
         if ($this->sucursal) {

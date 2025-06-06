@@ -84,21 +84,15 @@ async function CargarchartVentas(chartData, chartLabel) {
     }
 }
 
-async function getventasComparativo(event) {
-    event.preventDefault();
+async function getventasComparativo(sucursal) {
+    
 
-    sucursal = event.target["filsucursal"].value;
-
-    let empresa = JSON.parse(document.getElementById("idempresa").value);
-    let periodo = `&$filter=(Id_Empresa eq ${empresa.Id_Empresa})${
-        sucursal !== "" ? ` and Id_Sucursal eq ${sucursal}` : ""
-    }`;
-
+    
     // let response = await getVentas(periodo);
     // let jsonData = response.data["value"];
     // ;
 
-    let response = await getApiVentas("compafecha");
+    let response = await getApiVentas(`compafecha?sucursal=${sucursal}`);
     let jsonData = response.data;
 
     comparativo(jsonData);
@@ -264,5 +258,12 @@ if (ventasPdf) {
 
 let formComparativo = document.getElementById("formComparativofecha");
 if (formComparativo != null) {
-    formComparativo.addEventListener("submit",(evt)=>{ getventasComparativo(evt)});
+    
+    getventasComparativo("");
+    
+    formComparativo.addEventListener("submit",(event)=>{
+        event.preventDefault();
+
+    sucursal = event.target["filsucursal"].value;
+        getventasComparativo(sucursal)});
 }
